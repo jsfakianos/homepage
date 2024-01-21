@@ -1,0 +1,16 @@
+body {
+  background-color: #353334;
+
+
+}
+
+
+
+
+#IMG1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+
+}
