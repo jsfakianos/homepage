@@ -79,7 +79,7 @@
 
         // Send to Google Sheet (GET + no-cors avoids CORS issues)
         if (!GOOGLE_SCRIPT_URL.includes("YOUR_DEPLOYMENT_ID")) {
-          await fetch(`{params.toString()}`, {
+          await fetch(`${GOOGLE_SCRIPT_URL}?${params.toString()}`, {
             method: "GET",
             mode: "no-cors"
           });
