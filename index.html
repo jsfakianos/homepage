@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="homestyle01.css">
+  <title>The Sfakianos Family</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: system-ui, sans-serif;
+    }
+    .gif-container {
+      text-align: center;
+    }
+    img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="gif-container">
+    <img src="cooking.gif" alt="AI family cooking" usemap="#JeffandMindanMap"/>
+  </div>
+
+  <map name="JeffandMindanMap">
+    <area shape="circle" coords="84,79,50" title="Jeff" alt="Jeff" href="https://www.linkedin.com/in/jsfakianos">
+    <area shape="circle" coords="186,86,50" title="Mindan" alt="Mindan" href="https://www.linkedin.com/in/mindans">
+    <area shape="rect" coords="210,90,264,236" title="Charlie" alt="Charlie" href="https://drive.google.com/file/d/1zdfVBWVAmXDsHiapMhMgIPrBEut-2LNr/view?usp=drive_link">
+  </map>
+
+  <script>
+    // =============================================    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    // CONFIGURATION
+    // Paste your Google Apps Script web app URL here
+    // https://script.google.com/macros/s/AKfycbw1OQg-O92v05tyWWkTPPuJOBA0vwge6S17oXqYEP8AIIonJGD0NnTbrXNQxaIHz7bMUg/exec
+    // =============================================
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1OQg-O92v05tyWWkTPPuJOBA0vwge6S17oXqYEP8AIIonJGD0NnTbrXNQxaIHz7bMUg/exec";
+
+    async function logVisitor() {
+      if (GOOGLE_SCRIPT_URL.includes("YOUR_DEPLOYMENT_ID")) {
+        console.warn("Google Script URL not configured. Data will only appear in the browser console.");
+      }
+
+      try {
+        // Get IP + location data
+        const geoRes = await fetch("https://ipapi.co/json/");
+        const geo = await geoRes.json();
+
+        const params = new URLSearchParams({
+          ip: geo.ip || "",
+          city: geo.city || "",
+          region: geo.region || "",
+          country: geo.country_name || geo.country || "",
+          timezone: geo.timezone || "",
+          org: geo.org || "",
+          userAgent: navigator.userAgent,
+          language: navigator.language || "",
+          screen: `{screen.height}`,
+          viewport: `{window.innerHeight}`,
+          referrer: document.referrer || "direct",
+          pageUrl: location.href,
+          platform: navigator.platform || ""
+        });
+
+        console.log("Logging visitor:", Object.fromEntries(params));
+
+        // Send to Google Sheet (GET + no-cors avoids CORS issues)
+        if (!GOOGLE_SCRIPT_URL.includes("YOUR_DEPLOYMENT_ID")) {
+          await fetch(`{params.toString()}`, {
+            method: "GET",
+            mode: "no-cors"
+          });
+        }
+      } catch (err) {
+        console.error("Failed to log visitor:", err);
+      }
+    }
+
+    window.addEventListener("load", logVisitor);
+  </script>
+</body>
+</html>
+
